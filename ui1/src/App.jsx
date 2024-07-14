@@ -1,12 +1,19 @@
-import React from 'react'
-import { BriefcaseIcon, EnvelopeIcon, CreditCardIcon,BellAlertIcon,TrashIcon, PencilSquareIcon,UsersIcon,UserPlusIcon,ChatBubbleLeftIcon,EyeIcon } from "@heroicons/react/24/outline";
+import {React, useState,useEffect} from 'react'
+import { BriefcaseIcon, EnvelopeIcon, CreditCardIcon,BellAlertIcon,TrashIcon, PencilSquareIcon,UsersIcon,UserPlusIcon,ChatBubbleLeftIcon,EyeIcon,MapPinIcon, BanknotesIcon } from "@heroicons/react/24/outline";
 import { Menu, MenuItem, MenuItems ,MenuButton } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import logo from "./images/image.jpg"
 import acc from "./images/acc.jpg"
 
 const App = () => {
-  
+  const [jobData, setJobData] = useState([]);
+
+  useEffect(() => {
+    fetch('/detail.json')
+      .then((response) => response.json())
+      .then((data) => setJobData(data));
+  }, []);
+
   const navigation1 = [
     { name: 'Jobs', href: '#', current: true, icon: BriefcaseIcon },
     { name: 'Messages', href: '#', current: false, icon: EnvelopeIcon },
@@ -100,7 +107,7 @@ const App = () => {
     </Menu>
     </div>
     <div className="border-b-2 border-gray-200 py-5">
-    <div className=" absolute -mt-4 left-20 hidden sm:mb-8 sm:flex ">
+    <div className=" absolute -mt-4 left-16 hidden sm:mb-8 sm:flex ">
     {navigation2.map((item) => (
   <a
     key={item.name}
@@ -117,10 +124,10 @@ const App = () => {
 ))}
 </div>
   </div>
-  
-  <div className=" absolute right-1 w-72 h-full max-h-full border-l-2 border-gray-200">
+  <div className="flex flex-col">
+  <div className=" absolute -right-1 w-72 h-full max-h-full border-l-2 border-gray-200 bg-white">
     <div className="flex flex-row space-x-12">
-  <button className="text-sm leading-6 top-5 hover:text-white relative left-7 bg-orange-200 -ring-1 rounded-md h-8 w-28 ring-1 ring-orange-500 hover:bg-oranges text-oranges flex items-center justify-center space-x-2">
+  <button className="text-sm leading-6 top-5 hover:text-white relative left-5 bg-orange-200 -ring-1 rounded-md h-8 w-28 ring-1 ring-orange-500 hover:bg-oranges text-oranges flex items-center justify-center space-x-2">
   <TrashIcon className="h-4 w-4 " />
   <span>Delete Job</span>
 </button>
@@ -167,8 +174,41 @@ const App = () => {
   </div>
   
 </div>
-
   </div>
+  
+  {jobData.map((detail) => (
+    <>
+  <div className="h-32 w-full border-b-2 border-gray-200">
+    <p className=" relative top-5 left-20 text-3xl font-bold text-gray-700">{detail.post}</p>
+    <p className="absolute text-xs font-medium text-gray-400 left-1/3 top-40">{detail.time}</p>
+    <p className=" inline-flex relative text-lg top-10 left-20 font-medium	text-gray-500">
+    <MapPinIcon class="h-5 w-5 text-gray-500 mr-3 mt-1" />
+      {detail.location}</p>
+      <p className="inline-flex relative text-lg top-10 left-32 font-medium	text-gray-500">
+      <BanknotesIcon class="h-5 w-5 text-gray-500 mr-3 mt-1" />
+        {detail.earning}
+      </p>
+  </div>
+  <div className="h-32 w-full border-b-2 border-gray-200 grid lg:grid-cols-4">
+    <div className="  p-4 ml-16">
+      <p className="text-sm font-medium text-gray-400">Skills required</p>
+    </div>
+    <div className="p-4 -ml-9">
+    <p className="text-sm font-medium text-gray-400">Preferred languages</p>
+    </div>
+    <div className="p-4 -ml-24">
+    <p className="text-sm font-medium text-gray-400">Type</p>
+    </div>
+    <div className="p-4 -ml-60">
+    <p className="text-sm font-medium text-gray-400">Years of experience</p>
+    </div>
+  </div>
+  </>
+  )
+  )
+}
+</div>
+
     </>
   )
 }
